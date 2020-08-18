@@ -1,6 +1,6 @@
 ---
 title: "Daily Exercise 05"
-author: "Mike Johnson"
+author: "Meagan Brown"
 output: html_document
 ---
 
@@ -43,6 +43,7 @@ Hint: You can print the top X rows of a `data.frame` with `head`. In the above e
 head(covid, 5)
 ```
 
+
 to print the top 5 columns of the raw covid `object` 
 
 ## Question 1: 
@@ -51,7 +52,21 @@ Use `dplyr` verbs to  create a data.frame of the **5** counties with the most cu
 
 (**Hint:** `filter`, `arrange`)
 
+=
+
+
 ```{r}
+library(dplyr)
+library(tidyverse)
+
+url = 'https://raw.githubusercontent.com/nytimes/covid-19-data/master/us-counties.csv'
+
+covid = read_csv(url)
+
+covid %>%
+  filter(date == max(date)) %>%
+  arrange(desc(cases)) %>%
+  head(5)
 
 ```
 
@@ -62,6 +77,19 @@ Use `dplyr` verbs to create a data.frame of the **5** states with the _most_ cas
 (**Hint:** `filter`, `group_by`, `summarize`, `arrange`)
 
 ```{r}
+library(dplyr)
+library(tidyverse)
+
+url = 'https://raw.githubusercontent.com/nytimes/covid-19-data/master/us-counties.csv'
+
+covid = read_csv(url)
+
+covid %>%
+  group_by(state) %>%
+  filter(date == max(date)) %>%
+  summarize(cases) %>%
+  arrange(desc(cases)) %>%
+  head(5)
 
 ```
 
@@ -69,9 +97,20 @@ Use `dplyr` verbs to create a data.frame of the **5** states with the _most_ cas
 
 Use the `dplyr` verbs to report the **5** counties with the _worst_ current death/cases ratio: (e.g.$100* (deaths/cases)$)
 
-(**Hint:** `filter`, `mutate`, `arrange`)
 
 ```{r}
+library(dplyr)
+library(tidyverse)
+
+url = 'https://raw.githubusercontent.com/nytimes/covid-19-data/master/us-counties.csv'
+
+covid = read_csv(url)
+
+covid %>%
+  mutate(dpc= 100*(deaths/cases)) %>%
+  filter(date == max(date)) %>%
+  arrange(-dpc) %>%
+  head(5)
 
 ```
 
@@ -83,7 +122,20 @@ Use the `dplyr` verbs to report the **5** states with the _worst_ current death/
 (**Hint:** `filter`, `group_by`, `summarize`, `mutate`, `arrange`)
 
 ```{r}
+library(dplyr)
+library(tidyverse)
 
+url = 'https://raw.githubusercontent.com/nytimes/covid-19-data/master/us-counties.csv'
+
+covid = read_csv(url)
+
+covid %>%
+  group_by(state) %>% 
+  filter(date==max(date)) %>%
+  summarize(state, cases, deaths) %>%
+  mutate(dpc= 100*(deaths/cases)) %>%
+  arrange(desc(dpc)) %>%
+  head(5)
 ```
 
 
