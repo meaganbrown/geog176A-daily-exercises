@@ -21,6 +21,7 @@ state
 states_border <- st_union(us$geometry) %>%
   st_cast('MULTILINESTRING')
 
-
+plot(states_border, col = 'green')
+states_border
 
 
