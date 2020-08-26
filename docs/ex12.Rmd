@@ -1,0 +1,50 @@
+---
+title: "Geography 176A"
+author: "[Meagan Brown](https://meaganbrown.github.io)"
+subtitle: 'EX 12'
+output:
+  html_document:
+  theme: darkly
+---
+```{r echo=FALSE, message=FALSE, warning=FALSE, paged.print=FALSE}
+
+USAboundaries::us_states(resolution = "low")
+library(mapview)
+library(tidyverse)
+library(sf)
+library(units)
+library(USAboundaries)
+library(rnaturalearth)
+library(gghighlight)
+library(ggrepel)
+library(knitr)
+library(rmapshaper)
+
+conus = USAboundaries::us_states() %>%
+filter(!stusps %in% c("AK", "HI", "PR")) %>%
+st_transform(crs = 5070) %>% 
+st_combine()
+
+stConus <- st_simplify(conus, dTolerance = 55000)
+msConus <- ms_simplify(conus, keep = 0.01)
+geom_sf(data = stConus)
+
+ 
+ggplot() +
+geom_sf(data = conus)+
+labs(title = paste("Number of points: ", mapview::npts(conus)),
+caption = "Number of Points with the Raw data")
+
+ggplot() +
+geom_sf(data = msConus) +
+labs(title = paste("Number of points: ", mapview::npts(msConus)),
+caption = "Number of Points while Using ms_simplify")
+
+ggplot() +
+geom_sf(data = stConus) +
+labs(title = paste("Number of points: ", mapview::npts(stConus)),
+caption = "Number of Points while using st_simplify()")
+
+```
+
+```
